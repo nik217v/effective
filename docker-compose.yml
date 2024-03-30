@@ -11,7 +11,7 @@ services:
       - php
       - db
   php:
-    build: ./app
+    build: .
     volumes:
       - ./app:/var/www/html
   db:

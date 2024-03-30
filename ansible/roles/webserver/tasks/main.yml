@@ -1,11 +1,11 @@
 ---
 - name: Install Docker
-  ansible.builtin.package:
+  apt:
     name: docker.io
     state: present
 
 - name: Install Docker Compose
-  ansible.builtin.package:
+  apt:
     name: docker-compose
     state: present
 
@@ -23,6 +23,7 @@
   template:
     src: nginx.conf.j2
     dest: /opt/myapp/nginx.conf
+  register: nginx_config
 
 - name: Start application with Docker Compose
   docker_compose:
