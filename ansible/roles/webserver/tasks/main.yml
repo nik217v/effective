@@ -1,0 +1,36 @@
+---
+- name: Install Docker
+  ansible.builtin.package:
+    name: docker.io
+    state: present
+
+- name: Install Docker Compose
+  ansible.builtin.package:
+    name: docker-compose
+    state: present
+
+- name: Copy application files
+  copy:
+    src: ../app/
+    dest: /opt/myapp/
+
+- name: Copy docker-compose.yml
+  copy:
+    src: ../docker-compose.yml
+    dest: /opt/myapp/
+
+- name: Generate Nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: /opt/myapp/nginx.conf
+
+- name: Start application with Docker Compose
+  docker_compose:
+    project_src: /opt/myapp
+    state: present
+
+- name: Restart Nginx if needed
+  service:
+    name: nginx
+    state: restarted
+  when: nginx_config.changed
